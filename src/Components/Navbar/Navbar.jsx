@@ -7,7 +7,8 @@ import { RiVideoAddLine } from "react-icons/ri";
 import { BsBell } from "react-icons/bs";
 
 const Navbar = () => {
-  const [countryCode, setCountryCode] = useState("");
+
+  const [countryCode, setCountryCode] = useState(null);
 
   useEffect(() => {
     const fetchCountry = async () => {
@@ -17,6 +18,7 @@ const Navbar = () => {
 
     fetchCountry();
   }, []);
+
   return (
     <div className="flex justify-between items-center  opacity-95 sticky px-10 h-14">
       {/* 1st div  */}
