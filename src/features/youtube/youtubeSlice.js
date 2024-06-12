@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getHomePageVideos } from "../../Store/Reducers/getHomePageVideos";
 
 const initialState = {
     video : [],
@@ -14,6 +15,11 @@ const youtubeSlice = createSlice({
     initialState,
     reducers:{
         
+    },
+    extraReducers: (builder) =>{
+        builder.addCase(getHomePageVideos.fulfilled, (state,action)=>{
+            
+        })
     }
 });
 
