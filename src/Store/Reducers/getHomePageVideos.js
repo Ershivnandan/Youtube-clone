@@ -14,7 +14,8 @@ export const getHomePageVideos = createAsyncThunk(
       `https://youtube.googleapis.com/youtube/v3/search?maxResults=20&q="drop x out"&key=${API_KEY}&part=snippet&type=video`
     );
     const items = response.data.items;
+    console.log(items)
 
-    const parsedData = await parseData(items);
+    // const parsedData = await parseData(items);
   }
 );

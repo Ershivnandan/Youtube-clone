@@ -1,3 +1,3 @@
-export const convertRawToString = (labelValue, isSub=false)=>{
-    console.log("lasbel values", labelValue)
+export const convertRawToString = (labelValue, isSub =false)=>{
+    console.log("lasbel values", labelValue, isSub)
 }
