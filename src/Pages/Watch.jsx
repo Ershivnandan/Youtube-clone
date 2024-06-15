@@ -34,47 +34,65 @@ const Watch = () => {
   return (
     <>
       {currentPlaying && currentPlaying?.videoId === id && (
-        <div className="max-h-screen overflow-hidden flex">
-          <div className="relative w-full">
+        <div className="max-h-screen overflow-hidden flex flex-col lg:flex-row">
+          <div className="flex-1 relative">
             <Navbar />
-            <div className="p-4 w-3/4">
+            <div className="p-4">
               <iframe
                 src={`https://www.youtube.com/embed/${id}?autoplay=1`}
                 frameBorder="0"
-                width="900"
+                width="100%"
                 height="502"
-                className="px-10 rounded-2xl"
+                className="rounded-2xl w-full"
                 allowFullScreen
                 title="Youtube Player"
               ></iframe>
+              <div className="mt-4">
+                <h1 className="text-2xl font-semibold text-white">
+                  {currentPlaying?.videoTitle}
+                </h1>
+                <p className="text-sm text-gray-400 mt-2">
+                  {currentPlaying?.videoDescription}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="absolute right-10 top-20 w-1/4">
-            <h2 className="text-lg font-semibold mb-4">Recommended Videos</h2>
+          <div className="lg:w-1/3 w-full lg:relative right-0 top-20 p-4 bg-gray-900 lg:bg-transparent">
+            <h2 className="text-lg font-semibold mb-4 text-white">
+              Recommended Videos
+            </h2>
             {recommendedVideo && recommendedVideo.length > 0 ? (
               recommendedVideo.map((video) => (
-                <div key={video.channelInfo.id} className="mb-4 text-white">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => navigate(`/watch/${video.channelInfo.id}`)}
-                  >
-                    <img
-                      src={video.videoThumbnail}
-                      alt={video.videoTitle}
-                      className="w-full rounded-md"
-                    />
-                    <div className="mt-2">
-                      <h3 className="text-sm font-semibold">{video.videoTitle}</h3>
-                      <p className="text-xs  flex gap-3 py-3">
-                        <img src={video.channelInfo.image} alt="image" className="rounded-full w-8 h-8" />
-                        {video.channelInfo.name}</p>
-                      <p className="text-xs">{video.videoViews} views</p>
-                    </div>
+                <div
+                  key={video.videoId}
+                  className="mb-4 cursor-pointer"
+                  onClick={() => navigate(`/watch/${video.videoId}`)}
+                >
+                  <img
+                    src={video.videoThumbnail}
+                    alt={video.videoTitle}
+                    className="w-full rounded-lg mb-2"
+                  />
+                  <div className="text-white">
+                    <h3 className="text-base font-medium line-clamp-2">
+                      {video.videoTitle}
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                      <img
+                        src={video.channelInfo.image}
+                        alt={video.channelInfo.name}
+                        className="rounded-full w-8 h-8"
+                      />
+                      {video.channelInfo.name}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {video.videoViews} views • {video.videoAge}
+                    </p>
                   </div>
                 </div>
               ))
             ) : (
-              <p>No recommended videos available</p>
+              <p className="text-gray-400">No recommended videos available</p>
             )}
           </div>
         </div>
