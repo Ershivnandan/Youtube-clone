@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+import Navbar from "../Components/Navbar/Navbar";
+import Sidebar from "../Components/Sidebar/Sidebar";
 import { useAppDispatch, useAppSelector } from "../Hooks/useApp";
-import Spinner from "../components/Spinner";
+import Spinner from "../Components/Spinner/Spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Card from "../components/Card";
+import Card from "../Components/Card/Card";
 import { useNavigate } from "react-router-dom";
-import { clearVideos } from "../features/youtube/youtubeSlice";
-import { getSearchPageVideos } from "../store/reducers/getSearchPageVideos";
-import SearchCard from "../components/SearchCard";
+import { clearVideos } from "../features/youtube/youtubeSlice"; 
+import { getSearchPageVideos } from "../Store/Reducers/getSearchPageVideos";
+import SearchCard from "../Components/SearchCard/SearchCard";
 
 const Home = ()=> {
   const navigate = useNavigate();

@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import parseVideoDuration from "./parseVideoduration";
 import convertRawtoString from "./convertRawToStrings";
 import timeSince from "./timeSince";
@@ -11,65 +10,73 @@ const parseRecommendedData = async (items) => {
     const videoIds = [];
     const channelIds = [];
 
-    items.forEach((item) => {
-      channelIds.push(item.snippet.channelId);
-      videoIds.push(item.id.videoId);
-    });
+    for (let i = 0; i < items.length; i++) {
+      const { snippet, contentDetails } = items[i];
+      if (snippet && contentDetails && contentDetails.upload) {
+        channelIds.push(snippet.channelId);
+        videoIds.push(contentDetails.upload.videoId);
+      }
+    }
 
-    const {
-      data: { items: channelsData },
-    } = await axios.get(
+    const channelResponse = await axios.get(
       `https://youtube.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=${channelIds.join(
         ","
       )}&key=${API_KEY}`
     );
 
+    const channelsData = channelResponse.data.items || [];
+
     const parsedChannelsData = [];
-    channelsData.forEach((channel) =>
+    for (let i = 0; i < channelsData.length; i++) {
+      const channel = channelsData[i];
       parsedChannelsData.push({
         id: channel.id,
         image: channel.snippet.thumbnails.default.url,
-      })
-    );
+      });
+    }
 
-    const {
-      data: { items: videosData },
-    } = await axios.get(
+    const videoResponse = await axios.get(
       `https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
         ","
       )}&key=${API_KEY}`
     );
 
+    const videosData = videoResponse.data.items || [];
+
     const parseData = [];
-    items.forEach((item, index) => {
-      const { image: channelImage } = parsedChannelsData.find(
-        (data) => data.id === item.snippet.channelId
+    for (let i = 0; i < items.length; i++) {
+      const { snippet, contentDetails } = items[i];
+      const channelData = parsedChannelsData.find(
+        (data) => data.id === snippet.channelId
       );
-      if (channelImage) {
+      if (snippet && contentDetails && channelData) {
         parseData.push({
-          videoId: item.id.videoId,
-          videoTitle: item.snippet.title,
-          videoDescription: item.snippet.description,
-          videoThumbnail: item.snippet.thumbnails.medium.url,
-          videoLink: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+          videoId: contentDetails.upload.videoId,
+          videoTitle: snippet.title,
+          videoDescription: snippet.description,
+          videoThumbnail: snippet.thumbnails.medium.url,
+          videoLink: `https://www.youtube.com/watch?v=${contentDetails.upload.videoId}`,
           videoDuration: parseVideoDuration(
-            videosData[index].contentDetails.duration
+            videosData[i]?.contentDetails?.duration
           ),
           videoViews: convertRawtoString(
-            videosData[index].statistics.viewCount
+            videosData[i]?.statistics?.viewCount
           ),
-          videoAge: timeSince(new Date(item.snippet.publishedAt)),
+          videoAge: timeSince(new Date(snippet.publishedAt)),
           channelInfo: {
-            id: item.snippet.channelId,
-            image: channelImage,
-            name: item.snippet.channelTitle,
+            id: snippet.channelId,
+            image: channelData.image,
+            name: snippet.channelTitle,
           },
         });
       }
-    });
+    }
     return parseData;
+
+
   } catch (err) {
-    console.log(err);
+    console.error("Error parsing recommended data:", err);
+    return [];
   }
 };
 

@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaMicrophone } from "react-icons/fa";
 import { RiVideoAddLine } from "react-icons/ri";
 import { BsBell } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -36,10 +37,12 @@ const Navbar = () => {
         <div>
           <RxHamburgerMenu />
         </div>
+        <Link to={'/'} >
         <div className="flex gap-2 items-center justify-center">
           <img className="w-24 h-24" src="/Youtube.svg" alt="YT" />
           <sup className="text-xs">{countryCode}</sup>
         </div>
+        </Link>
       </div>
       {/* 2nd div */}
       <div className="flex items-center justify-center gap-5 py-2">
