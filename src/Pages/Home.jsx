@@ -37,7 +37,7 @@ const Home = () => {
                         loader={<Spinner />}
                         height={650}
                     >
-                        <div className='grid gap-y-14 gap-x-8 grid-cols-4 p-12'>
+                        <div className='grid gap-y-14 gap-x-8 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-12'>
                             {videos.map((item) => (
                                 <Card data={item} key={item.videoId} />
                             ))}
